@@ -70,8 +70,31 @@ void Building::define_object() {
 	cur_material->exponent = 128.0f * 0.1f;
 }
 
+void Ogre::define_object() {
+	glm::mat4* cur_MM;
+	Material* cur_material;
+
+	strcpy(filename, "Data/static_objects/dragon_vnt.geom");
+	n_fields = 8;
+	front_face_mode = GL_CCW;
+	prepare_geom_of_static_object();
+	flag_valid = true;
+
+	instances.emplace_back();
+	cur_MM = &(instances.back().ModelMatrix);
+	*cur_MM = glm::translate(glm::mat4(1.0f), glm::vec3(-100.0f, 70.0f, 40.0f));
+	*cur_MM = glm::scale(*cur_MM, glm::vec3(1.0f));
+	cur_material = &(instances.back().material);
+	cur_material->emission = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	cur_material->ambient = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	cur_material->diffuse = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	cur_material->specular = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	cur_material->exponent = 128.0f * 0.078125f;
+}
+
 /* 
 * Remove default static objects
+
 void Table::define_object() {
 	glm::mat4* cur_MM;
 	Material* cur_material;
@@ -81,17 +104,6 @@ void Table::define_object() {
 	front_face_mode = GL_CCW;
 	prepare_geom_of_static_object();
 	flag_valid = true;
-
-	instances.emplace_back();
-	cur_MM = &(instances.back().ModelMatrix);
-	*cur_MM = glm::translate(glm::mat4(1.0f), glm::vec3(157.0f, 76.5f, 0.0f));
-	*cur_MM = glm::scale(*cur_MM, glm::vec3(0.5f, 0.5f, 0.5f));
-	cur_material = &(instances.back().material);
-	cur_material->emission = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-	cur_material->ambient = glm::vec4(0.1f, 0.3f, 0.1f, 1.0f);
-	cur_material->diffuse = glm::vec4(0.4f, 0.6f, 0.3f, 1.0f);
-	cur_material->specular = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
-	cur_material->exponent = 15.0f;
 
 	instances.emplace_back();
 	cur_MM = &(instances.back().ModelMatrix);
