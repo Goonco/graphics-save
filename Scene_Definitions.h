@@ -32,7 +32,10 @@ enum STATIC_OBJECT_ID {
 };
 
 enum DYNAMIC_OBJECT_ID {
-	DYNAMIC_OBJECT_TIGER = 0, DYNAMIC_OBJECT_COW_1, DYNAMIC_OBJECT_COW_2
+	DYNAMIC_OBJECT_SPIDER = 0,
+	DYNAMIC_OBJECT_TIGER, 
+
+	/*DYNAMIC_OBJECT_COW_1, DYNAMIC_OBJECT_COW_2*/
 };
 
 enum SHADER_ID { SHADER_SIMPLE = 0, SHADER_PHONG, SHADER_PHONG_TEXUTRE };
@@ -179,20 +182,31 @@ struct Dynamic_Object { // an object that moves
 		std::vector<std::reference_wrapper<Shader>>& shader_list, int time_stamp);
 };
 
-struct Tiger_D : public Dynamic_Object { 
-	Tiger_D(DYNAMIC_OBJECT_ID _object_id) : Dynamic_Object(_object_id) {}
-	void define_object(); 
+struct Spider_D : public Dynamic_Object {
+	Spider_D(DYNAMIC_OBJECT_ID _object_id) : Dynamic_Object(_object_id) {}
+	void define_object();
 };
 
+struct Tiger_D : public Dynamic_Object {
+	Tiger_D(DYNAMIC_OBJECT_ID _object_id) : Dynamic_Object(_object_id) {}
+	void define_object();
+};
+
+/*
 struct Cow_D : public Dynamic_Object { 
 	Cow_D(DYNAMIC_OBJECT_ID _object_id) : Dynamic_Object(_object_id) {}
 	void define_object(); 
 };
+*/
 
 struct Dynamic_Geometry_Data {
+	Spider_D spider_d{ DYNAMIC_OBJECT_SPIDER };
 	Tiger_D tiger_d{ DYNAMIC_OBJECT_TIGER };
+
+	/*
 	Cow_D cow_d_1{ DYNAMIC_OBJECT_COW_1 };
 	Cow_D cow_d_2{ DYNAMIC_OBJECT_COW_2 };
+	*/
 };
 
 struct Window {

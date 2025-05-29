@@ -87,9 +87,12 @@ void Scene::build_static_world() {
 }
 
 void Scene::build_dynamic_world() {
-	dynamic_geometry_data.tiger_d.define_object();
+	dynamic_geometry_data.spider_d.define_object();
 	//dynamic_object_ID_mapper[DYNAMIC_OBJECT_TIGER] = dynamic_objects.size();
-	dynamic_objects.push_back(dynamic_geometry_data.tiger_d);
+	dynamic_objects.push_back(dynamic_geometry_data.spider_d);
+	
+	/*dynamic_geometry_data.tiger_d.define_object();
+	dynamic_objects.push_back(dynamic_geometry_data.tiger_d);*/
 
 	/*
 	// two different moving cows
