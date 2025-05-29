@@ -1,7 +1,4 @@
 #define _CRT_SECURE_NO_WARNINGS
-
-// testing
-
 #include "Scene_Definitions.h"
 
 void Tiger_D::define_object() {

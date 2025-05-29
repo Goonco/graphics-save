@@ -70,6 +70,8 @@ void Building::define_object() {
 	cur_material->exponent = 128.0f * 0.1f;
 }
 
+/* 
+* Remove default static objects
 void Table::define_object() {
 	glm::mat4* cur_MM;
 	Material* cur_material;
@@ -278,6 +280,8 @@ void Cow::define_object() {
 	cur_material->specular = glm::vec4(0.992157f, 0.941176f, 0.807843f, 1.0f);
 	cur_material->exponent = 0.21794872f * 0.6f;
 }
+*/
+
 void print_mat4(const char* string, glm::mat4 M) {
 	fprintf(stdout, "\n***** %s ******\n", string);
 	for (int i = 0; i < 4; i++)

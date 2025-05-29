@@ -142,6 +142,10 @@ struct Cow : public Static_Object {
 
 struct Static_Geometry_Data {
 	Building building{ STATIC_OBJECT_BUILDING };
+
+	/* 
+	* Remove default static objects
+	* 
 	Table table{ STATIC_OBJECT_TABLE };
 	Light light{ STATIC_OBJECT_LIGHT };
 	Teapot teapot{ STATIC_OBJECT_TEAPOT };
@@ -149,6 +153,7 @@ struct Static_Geometry_Data {
 	Frame frame{ STATIC_OBJECT_FRAME };
 	New_Picture new_picture{ STATIC_OBJECT_NEW_PICTURE };
 	Cow cow{ STATIC_OBJECT_COW };
+	*/
 };
 
 struct Dynamic_Object { // an object that moves

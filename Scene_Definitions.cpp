@@ -54,7 +54,7 @@ void Scene::build_static_world() {
 	static_object_ID_mapper[STATIC_OBJECT_BUILDING] = static_objects.size();
 	static_objects.push_back(static_geometry_data.building);
 
-	static_geometry_data.table.define_object();
+	/*static_geometry_data.table.define_object();
 	static_object_ID_mapper[STATIC_OBJECT_BUILDING] = static_objects.size();
 	static_objects.push_back(static_geometry_data.table);
 
@@ -80,7 +80,7 @@ void Scene::build_static_world() {
 
 	static_geometry_data.cow.define_object();
 	static_object_ID_mapper[STATIC_OBJECT_BUILDING] = static_objects.size();
-	static_objects.push_back(static_geometry_data.cow);
+	static_objects.push_back(static_geometry_data.cow);*/
 }
 
 void Scene::build_dynamic_world() {
@@ -117,7 +117,7 @@ void Scene::build_shader_list() {
 void Scene::initialize() {
 	axis_object.define_axis();
 	build_static_world();
-	build_dynamic_world();
+	//build_dynamic_world();
 	create_camera_list(window.width, window.height, window.aspect_ratio);
 	build_shader_list();
 }
