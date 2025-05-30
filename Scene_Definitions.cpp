@@ -108,11 +108,16 @@ void Scene::build_dynamic_world() {
 void Scene::create_camera_list(int win_width, int win_height, float win_aspect_ratio) {
 	camera_list.clear();
 	// main camera
-	camera_data.cam_main.define_camera(win_width, win_height, win_aspect_ratio);
-	camera_ID_mapper[CAMERA_MAIN] = camera_list.size();
-	camera_list.push_back(camera_data.cam_main);
 
-	// define others here
+	//camera_data.cam_main.define_camera(win_width, win_height, win_aspect_ratio);
+	//camera_ID_mapper[CAMERA_MAIN] = camera_list.size();
+	//camera_list.push_back(camera_data.cam_main);
+	
+
+	// ortho cameras
+	camera_data.cam_front_side.define_camera(win_width, win_height, win_aspect_ratio);
+	camera_ID_mapper[CAMERA_FRONT_SIDE] = camera_list.size();
+	camera_list.push_back(camera_data.cam_front_side);
 }
 
 void Scene::build_shader_list() {

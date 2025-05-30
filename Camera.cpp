@@ -7,7 +7,7 @@
 float MOVE_FB_SPEED = 10;
 float MOVE_LRUD_SPEED = 5;
 
-float ROTATE_SPEED = 0.1f;
+float ROTATE_SPEED = 1.0f;
 
 void Camera::look_at() {
 	ViewMatrix = glm::lookAt(cam_view.pos, cam_view.pos - cam_view.naxis,
@@ -75,8 +75,11 @@ void Perspective_Camera::define_camera(int win_width, int win_height, float win_
 		flag_valid = true;
 		flag_move = true; // yes. the main camera is permitted to move
 
+		ViewMatrix = glm::lookAt(glm::vec3(-600.0f, 100.0f, 100.0f), glm::vec3(0.0f, 100.0f, 0.0f),
+			glm::vec3(0.0f, 0.0f, 1.0f)); // initial pose for main camera 
+		/*
 		ViewMatrix = glm::lookAt(glm::vec3(-600.0f, -600.0f, 600.0f), glm::vec3(0.0f, 0.0f, 0.0f),
-			glm::vec3(0.0f, 0.0f, 1.0f)); // initial pose for main camera
+			glm::vec3(0.0f, 0.0f, 1.0f)); // initial pose for main camera */
 		cam_view.uaxis = glm::vec3(ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0]);
 		cam_view.vaxis = glm::vec3(ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1]);
 		cam_view.naxis = glm::vec3(ViewMatrix[0][2], ViewMatrix[1][2], ViewMatrix[2][2]);
@@ -98,4 +101,39 @@ void Perspective_Camera::define_camera(int win_width, int win_height, float win_
 		break;
 	}
 }
+
+void Orthographic_Camera::define_camera(int win_width, int win_height, float win_aspect_ratio) {
+	glm::mat3 R33_t;
+	glm::mat4 T;
+
+	switch (camera_id) {
+	case CAMERA_FRONT_SIDE:
+		flag_valid = true;
+		flag_move = true; // yes. the main camera is permitted to move
+
+		ViewMatrix = glm::lookAt(glm::vec3(-600.0f, 100.0f, 100.0f), glm::vec3(0.0f, 100.0f, 0.0f),
+			glm::vec3(0.0f, 0.0f, 1.0f)); // initial pose for main camera 
+		cam_view.uaxis = glm::vec3(ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0]);
+		cam_view.vaxis = glm::vec3(ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1]);
+		cam_view.naxis = glm::vec3(ViewMatrix[0][2], ViewMatrix[1][2], ViewMatrix[2][2]);
+		R33_t = glm::transpose(glm::mat3(ViewMatrix));
+		T = glm::mat4(R33_t) * ViewMatrix;
+		cam_view.pos = -glm::vec3(T[3][0], T[3][1], T[3][2]);
+
+		cam_proj.projection_type = CAMERA_PROJECTION_ORTHOGRAPHIC;
+		cam_proj.params.ortho.left = -300.0f;
+		cam_proj.params.ortho.bottom = 300.0f;
+		cam_proj.params.ortho.right = -300.0f;
+		cam_proj.params.ortho.top = 300.0f;
+		cam_proj.params.ortho.n = 1.0f;
+		cam_proj.params.ortho.f = 1000.0f;
+
+
+		ProjectionMatrix = glm::ortho(cam_proj.params.ortho.left, cam_proj.params.ortho.right, cam_proj.params.ortho.bottom, cam_proj.params.ortho.top, cam_proj.params.ortho.n, cam_proj.params.ortho.f);
+		view_port.x = 0; view_port.y = 0; view_port.w = win_width; view_port.h = win_height;
+		break;
+	}
+}
+
+
 

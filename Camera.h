@@ -31,7 +31,7 @@ struct Camera_Projection {
 			float fovy, aspect, n, f;
 		} pers;
 		struct {
-			float left, right, botton, top, n, f;
+			float left, right, bottom, top, n, f;
 		} ortho;
 	} params;
 };
@@ -69,4 +69,5 @@ struct Orthographic_Camera : public Camera {
 
 struct Camera_Data {
 	Perspective_Camera cam_main { CAMERA_MAIN };
+	Orthographic_Camera cam_front_side{ CAMERA_FRONT_SIDE };
 };
