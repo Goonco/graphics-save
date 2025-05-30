@@ -4,24 +4,85 @@
 #define TO_RADIAN 0.01745329252f  
 #define TO_DEGREE 57.295779513f
 
+float MOVE_FB_SPEED = 10;
+float MOVE_LRUD_SPEED = 5;
+
+float ROTATE_SPEED = 0.1f;
+
+void Camera::look_at() {
+	ViewMatrix = glm::lookAt(cam_view.pos, cam_view.pos - cam_view.naxis,
+		cam_view.vaxis); // initial pose for main camera
+}
+
+void Camera::move_camera(Camera_Move move) {
+	switch (move) {
+	case CAMERA_FRONT:
+		cam_view.pos += (-MOVE_FB_SPEED * cam_view.naxis);
+		break;
+	case CAMERA_BACK:
+		cam_view.pos += (MOVE_FB_SPEED * cam_view.naxis);
+		break;
+	case CAMERA_RIGHT:
+		cam_view.pos += (MOVE_LRUD_SPEED * cam_view.uaxis);
+		break;
+	case CAMERA_LEFT:
+		cam_view.pos += (-MOVE_LRUD_SPEED * cam_view.uaxis);
+		break;
+	case CAMERA_UP:
+		cam_view.pos += (MOVE_LRUD_SPEED * cam_view.vaxis);
+		break;
+	case CAMERA_DOWN:
+		cam_view.pos += (-MOVE_LRUD_SPEED * cam_view.vaxis);
+		break;
+	};
+
+	look_at();
+}
+
+void Camera::tilt_camera(Camera_Tilt tilt) {
+	switch (tilt) {
+	case U_C:
+		ViewMatrix = glm::rotate(ViewMatrix, glm::radians(ROTATE_SPEED), cam_view.uaxis);
+		break;
+	case U_RC:
+		ViewMatrix = glm::rotate(ViewMatrix, glm::radians(-ROTATE_SPEED), cam_view.uaxis);
+		break;
+	case V_C:
+		ViewMatrix = glm::rotate(ViewMatrix, glm::radians(ROTATE_SPEED), cam_view.vaxis);
+		break;
+	case V_RC:
+		ViewMatrix = glm::rotate(ViewMatrix, glm::radians(-ROTATE_SPEED), cam_view.vaxis);
+		break;
+	case N_C:
+		ViewMatrix = glm::rotate(ViewMatrix, glm::radians(ROTATE_SPEED), cam_view.naxis);
+		break;
+	case N_RC:
+		ViewMatrix = glm::rotate(ViewMatrix, glm::radians(-ROTATE_SPEED), cam_view.naxis);
+		break;
+	};
+	cam_view.uaxis = glm::vec3(ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0]);
+	cam_view.vaxis = glm::vec3(ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1]);
+	cam_view.naxis = glm::vec3(ViewMatrix[0][2], ViewMatrix[1][2], ViewMatrix[2][2]);
+	look_at();
+}
+
 void Perspective_Camera::define_camera(int win_width, int win_height, float win_aspect_ratio) {
 	glm::mat3 R33_t;
 	glm::mat4 T;
- 
+
 	switch (camera_id) {
 	case CAMERA_MAIN:
 		flag_valid = true;
 		flag_move = true; // yes. the main camera is permitted to move
 
-		// let's use glm funtions to set up the initial camera pose
-		ViewMatrix = glm::lookAt(glm::vec3(-600.0f, -600.0f, 400.0f), glm::vec3(125.0f, 80.0f, 25.0f),
+		ViewMatrix = glm::lookAt(glm::vec3(-600.0f, -600.0f, 600.0f), glm::vec3(0.0f, 0.0f, 0.0f),
 			glm::vec3(0.0f, 0.0f, 1.0f)); // initial pose for main camera
 		cam_view.uaxis = glm::vec3(ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0]);
 		cam_view.vaxis = glm::vec3(ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1]);
 		cam_view.naxis = glm::vec3(ViewMatrix[0][2], ViewMatrix[1][2], ViewMatrix[2][2]);
 		R33_t = glm::transpose(glm::mat3(ViewMatrix));
 		T = glm::mat4(R33_t) * ViewMatrix;
-		cam_view.pos = -glm::vec3(T[3][0], T[3][1], T[3][2]); // why does this work?
+		cam_view.pos = -glm::vec3(T[3][0], T[3][1], T[3][2]);
 
 		cam_proj.projection_type = CAMERA_PROJECTION_PERSPECTIVE;
 		cam_proj.params.pers.fovy = 15.0f * TO_RADIAN;
@@ -31,7 +92,7 @@ void Perspective_Camera::define_camera(int win_width, int win_height, float win_
 
 		ProjectionMatrix = glm::perspective(cam_proj.params.pers.fovy, cam_proj.params.pers.aspect,
 			cam_proj.params.pers.n, cam_proj.params.pers.f);
-		view_port.x = 200; view_port.y = 200; view_port.w = win_width - 200; view_port.h = win_height - 200;
+		view_port.x = 0; view_port.y = 0; view_port.w = win_width; view_port.h = win_height;
 		break;
 	case CAMERA_CC_0:
 		break;

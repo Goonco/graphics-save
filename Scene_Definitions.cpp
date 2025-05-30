@@ -50,9 +50,8 @@ void Scene::clock(int clock_id) { // currently one clock
 }
 
 void Scene::build_static_world() {
-	//static_geometry_data.building.define_object();
-	//static_object_ID_mapper[STATIC_OBJECT_BUILDING] = static_objects.size();
-	//static_objects.push_back(static_geometry_data.building);
+	static_geometry_data.building.define_object();
+	static_objects.push_back(static_geometry_data.building);
 
 	static_geometry_data.dragon.define_object();
 	static_objects.push_back(static_geometry_data.dragon);
@@ -88,13 +87,13 @@ void Scene::build_static_world() {
 
 void Scene::build_dynamic_world() {
 	dynamic_geometry_data.spider_d.define_object();
-	//dynamic_object_ID_mapper[DYNAMIC_OBJECT_TIGER] = dynamic_objects.size();
 	dynamic_objects.push_back(dynamic_geometry_data.spider_d);
-	
-	/*dynamic_geometry_data.tiger_d.define_object();
-	dynamic_objects.push_back(dynamic_geometry_data.tiger_d);*/
 
 	/*
+	dynamic_geometry_data.tiger_d.define_object();
+	//dynamic_object_ID_mapper[DYNAMIC_OBJECT_TIGER] = dynamic_objects.size();
+	dynamic_objects.push_back(dynamic_geometry_data.tiger_d);
+	 
 	// two different moving cows
 	dynamic_geometry_data.cow_d_1.define_object();
 	dynamic_object_ID_mapper[DYNAMIC_OBJECT_COW_1] = dynamic_objects.size();

@@ -9,6 +9,24 @@
 
 Scene scene;
 
+void printMatrix(const glm::mat4& mat) {
+	for (int row = 0; row < 4; ++row) {
+		printf("[ ");
+		for (int col = 0; col < 4; ++col) {
+			printf("%8.3f ", mat[col][row]);
+		}
+		printf("]\n");
+	}
+}
+
+void printVec(const glm::vec3& v) {
+	printf("[ ");
+	for (int row = 0; row < 3; ++row) {
+		printf("%8.3f ", v[row]);
+	}
+	printf("]\n");
+}
+
 void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	for (auto camera = scene.camera_list.begin(); camera != scene.camera_list.end(); camera++) {
@@ -21,6 +39,24 @@ void display(void) {
 		scene.draw_world();
 	}
 	glutSwapBuffers();
+}
+
+void move_aux(Camera_Move move) {
+	for (auto& camera_wrapper : scene.camera_list) {
+		Camera& cam = camera_wrapper.get();
+		if (cam.camera_id != CAMERA_MAIN) continue;
+		cam.move_camera(move);
+	}
+	glutPostRedisplay();
+}
+
+void tilt_aux(Camera_Tilt tilt) {
+	for (auto& camera_wrapper : scene.camera_list) {
+		Camera& cam = camera_wrapper.get();
+		if (cam.camera_id != CAMERA_MAIN) continue;
+		cam.tilt_camera(tilt);
+	}
+	glutPostRedisplay();
 }
 
 void keyboard(unsigned char key, int x, int y) {
@@ -64,7 +100,44 @@ void keyboard(unsigned char key, int x, int y) {
 		}
 		glutPostRedisplay();
 		break;
+	case 'w':
+		move_aux(CAMERA_FRONT);
+		break;
+	case 's':
+		move_aux(CAMERA_BACK);
+		break;
+	case 'a':
+		move_aux(CAMERA_LEFT);
+		break;
 	case 'd':
+		move_aux(CAMERA_RIGHT);
+		break;
+	case 'q':
+		move_aux(CAMERA_UP);
+		break;
+	case 'e':
+		move_aux(CAMERA_DOWN);
+		break;
+
+	case 'j':
+		tilt_aux(V_RC);
+		break;
+	case 'l':
+		tilt_aux(V_C);
+		break;
+	case 'i':
+		tilt_aux(U_RC);
+		break;
+	case 'k':
+		tilt_aux(U_C);
+		break;
+	case 'u':
+		tilt_aux(N_RC);
+		break;
+	case 'o':
+		tilt_aux(N_C);
+		break;
+	/*case 'd':
 		depth_test_on = 1 - depth_test_on;
 		if (depth_test_on) {
 			glEnable(GL_DEPTH_TEST);
@@ -75,7 +148,7 @@ void keyboard(unsigned char key, int x, int y) {
 			fprintf(stdout, "^^^ Depth test disabled.\n");
 		}
 		glutPostRedisplay();
-		break;
+		break;*/
 	}
 }
 

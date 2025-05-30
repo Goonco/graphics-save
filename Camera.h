@@ -7,8 +7,16 @@ enum Camera_Projection_TYPE {
 };
 
 enum Camera_ID {
-	CAMERA_MAIN = 0, CAMERA_SIDE_FRONT, CAMERA_TOP, CAMERA_SIDE,
+	CAMERA_MAIN = 0, CAMERA_FRONT_SIDE, CAMERA_TOP, CAMERA_SIDE,
 	CAMERA_CC_0, CAMERA_CC_1
+};
+
+enum Camera_Move {
+	CAMERA_LEFT = 0, CAMERA_RIGHT, CAMERA_FRONT, CAMERA_BACK, CAMERA_UP, CAMERA_DOWN
+};
+
+enum Camera_Tilt {
+	U_C, U_RC, N_C, N_RC, V_C, V_RC
 };
 
 struct Camera_View {
@@ -43,6 +51,10 @@ struct Camera {
 	Camera(Camera_ID _camera_id) : camera_id(_camera_id) {}
 	bool flag_valid;
 	bool flag_move; // what else?
+
+	void look_at();
+	void move_camera(Camera_Move move);
+	void tilt_camera(Camera_Tilt tilt);
 };
 
 struct Perspective_Camera : public Camera {
