@@ -54,8 +54,8 @@ void Scene::build_static_world() {
 	//static_object_ID_mapper[STATIC_OBJECT_BUILDING] = static_objects.size();
 	//static_objects.push_back(static_geometry_data.building);
 
-	static_geometry_data.ogre.define_object();
-	static_objects.push_back(static_geometry_data.ogre);
+	static_geometry_data.dragon.define_object();
+	static_objects.push_back(static_geometry_data.dragon);
 
 	/*static_geometry_data.table.define_object();
 	static_object_ID_mapper[STATIC_OBJECT_BUILDING] = static_objects.size();

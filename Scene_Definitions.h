@@ -25,7 +25,7 @@ extern unsigned int shader_ID_mapper[N_MAX_SHADERS];
 
 enum STATIC_OBJECT_ID {
 	STATIC_OBJECT_BUILDING = 0,
-	STATIC_OBJECT_OGRE
+	STATIC_OBJECT_DRAGON
 	/*STATIC_OBJECT_TABLE, STATIC_OBJECT_LIGHT, 
 	STATIC_OBJECT_TEAPOT, STATIC_OBJECT_NEW_CHAIR, 
 	STATIC_OBJECT_FRAME, STATIC_OBJECT_NEW_PICTURE, STATIC_OBJECT_COW*/
@@ -113,8 +113,8 @@ struct Building : public Static_Object {
 	void define_object(); 
 };
 
-struct Ogre : public Static_Object {
-	Ogre(STATIC_OBJECT_ID _object_id) : Static_Object(_object_id) {}
+struct Dragon : public Static_Object {
+	Dragon(STATIC_OBJECT_ID _object_id) : Static_Object(_object_id) {}
 	void define_object();
 };
 
@@ -154,10 +154,9 @@ struct Cow : public Static_Object {
 
 struct Static_Geometry_Data {
 	Building building{ STATIC_OBJECT_BUILDING };
-	Ogre ogre{ STATIC_OBJECT_OGRE };
+	Dragon dragon{ STATIC_OBJECT_DRAGON };
+	
 	/* 
-	* Remove default static objects
-	* 
 	Table table{ STATIC_OBJECT_TABLE };
 	Light light{ STATIC_OBJECT_LIGHT };
 	Teapot teapot{ STATIC_OBJECT_TEAPOT };

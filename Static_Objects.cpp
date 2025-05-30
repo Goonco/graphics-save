@@ -70,7 +70,7 @@ void Building::define_object() {
 	cur_material->exponent = 128.0f * 0.1f;
 }
 
-void Ogre::define_object() {
+void Dragon::define_object() {
 	glm::mat4* cur_MM;
 	Material* cur_material;
 
