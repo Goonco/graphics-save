@@ -6,8 +6,8 @@
 
 float MOVE_FB_SPEED = 10;
 float MOVE_LRUD_SPEED = 5;
-
 float ROTATE_SPEED = 1.0f;
+float ZOOM_SPEED = 1.0f;
 
 void Camera::look_at() {
 	ViewMatrix = glm::lookAt(cam_view.pos, cam_view.pos - cam_view.naxis,
@@ -66,12 +66,29 @@ void Camera::tilt_camera(Camera_Tilt tilt) {
 	look_at();
 }
 
+void Perspective_Camera::zoom_camera(Camera_Zoom zoom) {
+	float tmp;
+	switch (zoom) {
+	case ZOOM_OUT :
+		cam_proj.params.pers.fovy += ZOOM_SPEED * TO_RADIAN;
+		break;
+	case ZOOM_IN :
+		tmp = cam_proj.params.pers.fovy - ZOOM_SPEED * TO_RADIAN;
+		if (tmp > 0)
+			cam_proj.params.pers.fovy = tmp;
+		break;
+	}
+	ProjectionMatrix = glm::perspective(cam_proj.params.pers.fovy, cam_proj.params.pers.aspect,
+		cam_proj.params.pers.n, cam_proj.params.pers.f);
+}
+
 void Perspective_Camera::define_camera(int win_width, int win_height, float win_aspect_ratio) {
-	float left_padding = win_width / 4;
+	float left_padding = win_width / 3;
+	glm::vec3 pos;
 
 	switch (camera_id) {
 	case CAMERA_MAIN:
-		ViewMatrix = glm::lookAt(glm::vec3(0.0f, -1.0f, 800.0f), glm::vec3(0.0f, 0.0f, 0.0f),
+		ViewMatrix = glm::lookAt(glm::vec3(600.0f), glm::vec3(0.0f, 0.0f, 0.0f),
 			glm::vec3(0.0f, 0.0f, 1.0f));
 	
 		define_axis_and_pos();
@@ -87,11 +104,62 @@ void Perspective_Camera::define_camera(int win_width, int win_height, float win_
 		
 		view_port.x = left_padding; view_port.y = 0; view_port.w = win_width - left_padding; view_port.h = win_height;
 		break;
-	case CAMERA_CC_0:
+	case CAMERA_CC_1:
+		pos = glm::vec3(100.0f, 15.0f, 10.0f);
+		ViewMatrix = glm::lookAt(pos, pos - glm::vec3(1.0f, 0.0f, 0.0f),
+			glm::vec3(0.0f, 0.0f, 1.0f));
+
+		define_axis_and_pos();
+
+		cam_proj.projection_type = CAMERA_PROJECTION_PERSPECTIVE;
+		cam_proj.params.pers.fovy = 100.0f * TO_RADIAN;
+		cam_proj.params.pers.aspect = win_aspect_ratio;
+		cam_proj.params.pers.n = 1.0f;
+		cam_proj.params.pers.f = 50000.0f;
+
+		ProjectionMatrix = glm::perspective(cam_proj.params.pers.fovy, cam_proj.params.pers.aspect,
+			cam_proj.params.pers.n, cam_proj.params.pers.f);
+
+		view_port.x = left_padding; view_port.y = 0; view_port.w = win_width - left_padding; view_port.h = win_height;
+		break;
+	case CAMERA_CC_2:
+		pos = glm::vec3(-97.0f, 64.5f, 10.0f);
+		ViewMatrix = glm::lookAt(pos, pos - glm::vec3(0.0f, 1.0f, 0.0f),
+			glm::vec3(0.0f, 0.0f, 1.0f));
+
+		define_axis_and_pos();
+
+		cam_proj.projection_type = CAMERA_PROJECTION_PERSPECTIVE;
+		cam_proj.params.pers.fovy = 100.0f * TO_RADIAN;
+		cam_proj.params.pers.aspect = win_aspect_ratio;
+		cam_proj.params.pers.n = 1.0f;
+		cam_proj.params.pers.f = 50000.0f;
+
+		ProjectionMatrix = glm::perspective(cam_proj.params.pers.fovy, cam_proj.params.pers.aspect,
+			cam_proj.params.pers.n, cam_proj.params.pers.f);
+
+		view_port.x = left_padding; view_port.y = 0; view_port.w = win_width - left_padding; view_port.h = win_height;
+		break;
+	case CAMERA_CC_3:
+		pos = glm::vec3(-45.0f, -64.5f, 10.0f);
+		ViewMatrix = glm::lookAt(pos, pos + glm::vec3(0.0f, 1.0f, 0.0f),
+			glm::vec3(0.0f, 0.0f, 1.0f));
+
+		define_axis_and_pos();
+
+		cam_proj.projection_type = CAMERA_PROJECTION_PERSPECTIVE;
+		cam_proj.params.pers.fovy = 100.0f * TO_RADIAN;
+		cam_proj.params.pers.aspect = win_aspect_ratio;
+		cam_proj.params.pers.n = 1.0f;
+		cam_proj.params.pers.f = 50000.0f;
+
+		ProjectionMatrix = glm::perspective(cam_proj.params.pers.fovy, cam_proj.params.pers.aspect,
+			cam_proj.params.pers.n, cam_proj.params.pers.f);
+
+		view_port.x = left_padding; view_port.y = 0; view_port.w = win_width - left_padding; view_port.h = win_height;
 		break;
 	}
 }
-
 
 void Camera::define_axis_and_pos() {
 	glm::mat3 R33_t;
@@ -106,7 +174,7 @@ void Camera::define_axis_and_pos() {
 }
 
 void Orthographic_Camera::define_camera(int win_width, int win_height, float win_aspect_ratio) {
-	float left_padding = win_width / 4;
+	float left_padding = win_width / 3;
 	float squash = win_height / 3;
 
 	switch (camera_id) {
@@ -117,8 +185,8 @@ void Orthographic_Camera::define_camera(int win_width, int win_height, float win
 		define_axis_and_pos();
 
 		cam_proj.projection_type = CAMERA_PROJECTION_ORTHOGRAPHIC;
-		cam_proj.params.ortho.left = -75.0f;
-		cam_proj.params.ortho.bottom = -25.0f;
+		cam_proj.params.ortho.left = -90.0f;
+		cam_proj.params.ortho.bottom = -30.0f;
 		cam_proj.params.ortho.right = -cam_proj.params.ortho.left;
 		cam_proj.params.ortho.top = -cam_proj.params.ortho.bottom;
 		cam_proj.params.ortho.n = 1.0f;
@@ -134,8 +202,8 @@ void Orthographic_Camera::define_camera(int win_width, int win_height, float win
 		define_axis_and_pos();
 
 		cam_proj.projection_type = CAMERA_PROJECTION_ORTHOGRAPHIC;
-		cam_proj.params.ortho.left = -110.0f;
-		cam_proj.params.ortho.bottom = -25.0f;
+		cam_proj.params.ortho.left = -132.0f;
+		cam_proj.params.ortho.bottom = -30.0f;
 		cam_proj.params.ortho.right = -cam_proj.params.ortho.left;
 		cam_proj.params.ortho.top = -cam_proj.params.ortho.bottom;
 		cam_proj.params.ortho.n = 1.0f;
@@ -151,8 +219,8 @@ void Orthographic_Camera::define_camera(int win_width, int win_height, float win
 		define_axis_and_pos();
 
 		cam_proj.projection_type = CAMERA_PROJECTION_ORTHOGRAPHIC;
-		cam_proj.params.ortho.left = -110.0f;
-		cam_proj.params.ortho.bottom = -75.0f;
+		cam_proj.params.ortho.left = -132.0f;
+		cam_proj.params.ortho.bottom = -90.0f;
 		cam_proj.params.ortho.right = -cam_proj.params.ortho.left;
 		cam_proj.params.ortho.top = -cam_proj.params.ortho.bottom;
 		cam_proj.params.ortho.n = 1.0f;

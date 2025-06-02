@@ -25,17 +25,17 @@ extern unsigned int shader_ID_mapper[N_MAX_SHADERS];
 
 enum STATIC_OBJECT_ID {
 	STATIC_OBJECT_BUILDING = 0,
-	STATIC_OBJECT_DRAGON
-	/*STATIC_OBJECT_TABLE, STATIC_OBJECT_LIGHT, 
-	STATIC_OBJECT_TEAPOT, STATIC_OBJECT_NEW_CHAIR, 
-	STATIC_OBJECT_FRAME, STATIC_OBJECT_NEW_PICTURE, STATIC_OBJECT_COW*/
+	STATIC_OBJECT_DRAGON,
+	STATIC_OBJECT_LIGHT,
+	STATIC_OBJECT_TABLE,
+	STATIC_OBJECT_IRONMAN,
+	STATIC_OBJECT_BIKE,
+	STATIC_OBJECT_TABLE_AND_TEA,
 };
 
 enum DYNAMIC_OBJECT_ID {
 	DYNAMIC_OBJECT_SPIDER = 0,
-	DYNAMIC_OBJECT_TIGER, 
-
-	/*DYNAMIC_OBJECT_COW_1, DYNAMIC_OBJECT_COW_2*/
+	DYNAMIC_OBJECT_WOLF, 
 };
 
 enum SHADER_ID { SHADER_SIMPLE = 0, SHADER_PHONG, SHADER_PHONG_TEXUTRE };
@@ -118,53 +118,40 @@ struct Dragon : public Static_Object {
 	void define_object();
 };
 
-/*
-struct Table : public Static_Object { 
-	Table(STATIC_OBJECT_ID _object_id) : Static_Object(_object_id) {}
-	void define_object(); 
-};
-
-struct Light : public Static_Object { 
+struct Light : public Static_Object {
 	Light(STATIC_OBJECT_ID _object_id) : Static_Object(_object_id) {}
-	void define_object(); 
-};
-struct Teapot : public Static_Object { 
-	Teapot(STATIC_OBJECT_ID _object_id) : Static_Object(_object_id) {}
-	void define_object(); 
-};
-struct New_Chair : public Static_Object { 
-	New_Chair(STATIC_OBJECT_ID _object_id) : Static_Object(_object_id) {}
-	void define_object(); 
+	void define_object();
+	void add_instance(const glm::vec3& position, float rotation_deg);
 };
 
-struct Frame : public Static_Object { 
-	Frame(STATIC_OBJECT_ID _object_id) : Static_Object(_object_id) {}
-	void define_object(); 
+struct Table : public Static_Object {
+	Table(STATIC_OBJECT_ID _object_id) : Static_Object(_object_id) {}
+	void define_object();
 };
 
-struct New_Picture : public Static_Object { 
-	New_Picture(STATIC_OBJECT_ID _object_id) : Static_Object(_object_id) {}
-	void define_object(); 
+struct Ironman : public Static_Object {
+	Ironman(STATIC_OBJECT_ID _object_id) : Static_Object(_object_id) {}
+	void define_object();
 };
-struct Cow : public Static_Object { 
-	Cow(STATIC_OBJECT_ID _object_id) : Static_Object(_object_id) {}
-	void define_object(); 
+
+struct Bike : public Static_Object {
+	Bike(STATIC_OBJECT_ID _object_id) : Static_Object(_object_id) {}
+	void define_object();
 };
-*/
+
+struct TableAndTea : public Static_Object {
+	TableAndTea(STATIC_OBJECT_ID _object_id) : Static_Object(_object_id) {}
+	void define_object();
+};
 
 struct Static_Geometry_Data {
 	Building building{ STATIC_OBJECT_BUILDING };
 	Dragon dragon{ STATIC_OBJECT_DRAGON };
-	
-	/* 
-	Table table{ STATIC_OBJECT_TABLE };
 	Light light{ STATIC_OBJECT_LIGHT };
-	Teapot teapot{ STATIC_OBJECT_TEAPOT };
-	New_Chair new_chair{ STATIC_OBJECT_NEW_CHAIR };
-	Frame frame{ STATIC_OBJECT_FRAME };
-	New_Picture new_picture{ STATIC_OBJECT_NEW_PICTURE };
-	Cow cow{ STATIC_OBJECT_COW };
-	*/
+	Table table{ STATIC_OBJECT_TABLE };
+	Ironman ironman{ STATIC_OBJECT_IRONMAN };
+	Bike bike{ STATIC_OBJECT_BIKE };
+	TableAndTea tableAndTea{ STATIC_OBJECT_TABLE_AND_TEA };
 };
 
 struct Dynamic_Object { // an object that moves
@@ -184,28 +171,26 @@ struct Dynamic_Object { // an object that moves
 struct Spider_D : public Dynamic_Object {
 	Spider_D(DYNAMIC_OBJECT_ID _object_id) : Dynamic_Object(_object_id) {}
 	void define_object();
+
+	glm::vec3 pos = glm::vec3(0.0f);
+	bool flag_up;
 };
 
-struct Tiger_D : public Dynamic_Object {
-	Tiger_D(DYNAMIC_OBJECT_ID _object_id) : Dynamic_Object(_object_id) {}
+enum Wolf_Phase {
+	Wolf_Phase_Left = 0, Wolf_Phase_Down, Wolf_Phase_Up, Wolf_Phase_Right
+};
+struct Wolf_D : public Dynamic_Object {
+	Wolf_D(DYNAMIC_OBJECT_ID _object_id) : Dynamic_Object(_object_id) {}
 	void define_object();
+
+	glm::vec3 pos = glm::vec3(0.0f);
+	Wolf_Phase phase = Wolf_Phase_Left;
 };
 
-/*
-struct Cow_D : public Dynamic_Object { 
-	Cow_D(DYNAMIC_OBJECT_ID _object_id) : Dynamic_Object(_object_id) {}
-	void define_object(); 
-};
-*/
 
 struct Dynamic_Geometry_Data {
 	Spider_D spider_d{ DYNAMIC_OBJECT_SPIDER };
-	Tiger_D tiger_d{ DYNAMIC_OBJECT_TIGER };
-
-	/*
-	Cow_D cow_d_1{ DYNAMIC_OBJECT_COW_1 };
-	Cow_D cow_d_2{ DYNAMIC_OBJECT_COW_2 };
-	*/
+	Wolf_D wolf_d{ DYNAMIC_OBJECT_WOLF };
 };
 
 struct Window {
@@ -235,13 +220,17 @@ struct Scene {
 
 	Axis_Object axis_object;
 
+	Camera_ID display_cam;
+
 	Scene() {
 		time_stamp = 0;
 		static_objects.clear();
 		shader_list.clear();
 		shader_kind = SHADER_SIMPLE;
 		ViewMatrix = ProjectionMatrix = glm::mat4(1.0f);
-	}
+
+		display_cam = CAMERA_MAIN;
+	};
 
 	void clock(int clock_id);
 	void build_static_world();

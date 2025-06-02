@@ -56,53 +56,28 @@ void Scene::build_static_world() {
 	static_geometry_data.dragon.define_object();
 	static_objects.push_back(static_geometry_data.dragon);
 
-	/*static_geometry_data.table.define_object();
-	static_object_ID_mapper[STATIC_OBJECT_BUILDING] = static_objects.size();
-	static_objects.push_back(static_geometry_data.table);
-
 	static_geometry_data.light.define_object();
-	static_object_ID_mapper[STATIC_OBJECT_BUILDING] = static_objects.size();
 	static_objects.push_back(static_geometry_data.light);
 
-	static_geometry_data.teapot.define_object();
-	static_object_ID_mapper[STATIC_OBJECT_BUILDING] = static_objects.size();
-	static_objects.push_back(static_geometry_data.teapot);
+	static_geometry_data.table.define_object();
+	static_objects.push_back(static_geometry_data.table);
 
-	static_geometry_data.new_chair.define_object();
-	static_object_ID_mapper[STATIC_OBJECT_BUILDING] = static_objects.size();
-	static_objects.push_back(static_geometry_data.new_chair);
+	static_geometry_data.ironman.define_object();
+	static_objects.push_back(static_geometry_data.ironman);
 
-	static_geometry_data.frame.define_object();
-	static_object_ID_mapper[STATIC_OBJECT_BUILDING] = static_objects.size();
-	static_objects.push_back(static_geometry_data.frame);
+	static_geometry_data.bike.define_object();
+	static_objects.push_back(static_geometry_data.bike);
 
-	static_geometry_data.new_picture.define_object();
-	static_object_ID_mapper[STATIC_OBJECT_BUILDING] = static_objects.size();
-	static_objects.push_back(static_geometry_data.new_picture);
-
-	static_geometry_data.cow.define_object();
-	static_object_ID_mapper[STATIC_OBJECT_BUILDING] = static_objects.size();
-	static_objects.push_back(static_geometry_data.cow);*/
+	static_geometry_data.tableAndTea.define_object();
+	static_objects.push_back(static_geometry_data.tableAndTea);
 }
 
 void Scene::build_dynamic_world() {
 	dynamic_geometry_data.spider_d.define_object();
 	dynamic_objects.push_back(dynamic_geometry_data.spider_d);
 
-	/*
-	dynamic_geometry_data.tiger_d.define_object();
-	//dynamic_object_ID_mapper[DYNAMIC_OBJECT_TIGER] = dynamic_objects.size();
-	dynamic_objects.push_back(dynamic_geometry_data.tiger_d);
-	 
-	// two different moving cows
-	dynamic_geometry_data.cow_d_1.define_object();
-	dynamic_object_ID_mapper[DYNAMIC_OBJECT_COW_1] = dynamic_objects.size();
-	dynamic_objects.push_back(dynamic_geometry_data.cow_d_1);
-
-	dynamic_geometry_data.cow_d_2.define_object();
-	dynamic_object_ID_mapper[DYNAMIC_OBJECT_COW_2] = dynamic_objects.size();
-	dynamic_objects.push_back(dynamic_geometry_data.cow_d_2);
-	*/
+	dynamic_geometry_data.wolf_d.define_object();
+	dynamic_objects.push_back(dynamic_geometry_data.wolf_d);
 }
 
 void Scene::create_camera_list(int win_width, int win_height, float win_aspect_ratio) {
@@ -112,6 +87,19 @@ void Scene::create_camera_list(int win_width, int win_height, float win_aspect_r
 	camera_data.cam_main.define_camera(win_width, win_height, win_aspect_ratio);
 	camera_ID_mapper[CAMERA_MAIN] = camera_list.size();
 	camera_list.push_back(camera_data.cam_main);
+
+	// fixed cameras
+	camera_data.cam_cc_1.define_camera(win_width, win_height, win_aspect_ratio);
+	camera_ID_mapper[CAMERA_CC_1] = camera_list.size();
+	camera_list.push_back(camera_data.cam_cc_1);
+
+	camera_data.cam_cc_2.define_camera(win_width, win_height, win_aspect_ratio);
+	camera_ID_mapper[CAMERA_CC_2] = camera_list.size();
+	camera_list.push_back(camera_data.cam_cc_2);
+
+	camera_data.cam_cc_3.define_camera(win_width, win_height, win_aspect_ratio);
+	camera_ID_mapper[CAMERA_CC_3] = camera_list.size();
+	camera_list.push_back(camera_data.cam_cc_3);
 	
 
 	// ortho cameras

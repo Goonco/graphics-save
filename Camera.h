@@ -8,7 +8,7 @@ enum Camera_Projection_TYPE {
 
 enum Camera_ID {
 	CAMERA_MAIN = 0, CAMERA_FRONT_SIDE, CAMERA_TOP, CAMERA_SIDE,
-	CAMERA_CC_0, CAMERA_CC_1
+	CAMERA_CC_1, CAMERA_CC_2, CAMERA_CC_3
 };
 
 enum Camera_Move {
@@ -16,7 +16,11 @@ enum Camera_Move {
 };
 
 enum Camera_Tilt {
-	U_C, U_RC, N_C, N_RC, V_C, V_RC
+	U_C = 0, U_RC, N_C, N_RC, V_C, V_RC
+};
+
+enum Camera_Zoom {
+	ZOOM_IN = 0, ZOOM_OUT
 };
 
 struct Camera_View {
@@ -59,6 +63,7 @@ struct Camera {
 struct Perspective_Camera : public Camera {
 	Perspective_Camera(Camera_ID _camera_id) : Camera(_camera_id) {}
 	void define_camera(int win_width, int win_height, float win_aspect_ratio);
+	void zoom_camera(Camera_Zoom cam_zoom);
 };
 
 struct Orthographic_Camera : public Camera {
@@ -68,6 +73,10 @@ struct Orthographic_Camera : public Camera {
 
 struct Camera_Data {
 	Perspective_Camera cam_main { CAMERA_MAIN };
+	Perspective_Camera cam_cc_1{ CAMERA_CC_1 };
+	Perspective_Camera cam_cc_2{ CAMERA_CC_2 };
+	Perspective_Camera cam_cc_3{ CAMERA_CC_3 };
+
 	Orthographic_Camera cam_front_side{ CAMERA_FRONT_SIDE };
 	Orthographic_Camera cam_side{ CAMERA_SIDE };
 	Orthographic_Camera cam_top{ CAMERA_TOP };

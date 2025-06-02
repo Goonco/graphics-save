@@ -31,6 +31,8 @@ void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	for (auto& camera_wrapper : scene.camera_list) {
 		Camera& cam = camera_wrapper.get();
+		if (cam.cam_proj.projection_type == CAMERA_PROJECTION_PERSPECTIVE && scene.display_cam != cam.camera_id) continue;
+		
 		glViewport(cam.view_port.x, cam.view_port.y,cam.view_port.w, cam.view_port.h);
 		scene.ViewMatrix = cam.ViewMatrix;
 		scene.ProjectionMatrix = cam.ProjectionMatrix;
@@ -38,6 +40,17 @@ void display(void) {
 		scene.draw_world();
 	}
 	glutSwapBuffers();
+}
+
+void zoom_aux(Camera_Zoom zoom) {
+	for (auto& camera_wrapper : scene.camera_list) {
+		Camera& cam = camera_wrapper.get();
+		if (cam.camera_id != CAMERA_MAIN) continue;
+
+		Perspective_Camera* persp_cam = static_cast<Perspective_Camera*>(&cam);
+		persp_cam->zoom_camera(zoom);
+	}
+	glutPostRedisplay();
 }
 
 void move_aux(Camera_Move move) {
@@ -71,32 +84,25 @@ void keyboard(unsigned char key, int x, int y) {
 		case 0:
 			glDisable(GL_CULL_FACE);
 			glutPostRedisplay();
-			fprintf(stdout, "^^^ No faces are culled.\n");
 			break;
 		case 1: // cull back faces;
 			glCullFace(GL_BACK);
 			glEnable(GL_CULL_FACE);
 			glutPostRedisplay();
-			fprintf(stdout, "^^^ Back faces are culled.\n");
 			break;
 		case 2: // cull front faces;
 			glCullFace(GL_FRONT);
 			glEnable(GL_CULL_FACE);
 			glutPostRedisplay();
-			fprintf(stdout, "^^^ Front faces are culled.\n");
 			break;
 		}
 		break;
 	case 'f':
 		polygon_fill_on = 1 - polygon_fill_on;
-		if (polygon_fill_on) {
+		if (polygon_fill_on) 
 		 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			fprintf(stdout, "^^^ Polygon filling enabled.\n");
-		}
-		else {
+		else 
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			fprintf(stdout, "^^^ Line drawing enabled.\n");
-		}
 		glutPostRedisplay();
 		break;
 	case 'w':
@@ -136,7 +142,24 @@ void keyboard(unsigned char key, int x, int y) {
 	case 'o':
 		tilt_aux(N_C);
 		break;
-	/*case 'd':
+
+	case '1':
+		scene.display_cam = CAMERA_CC_1;
+		glutPostRedisplay();
+		break;
+	case '2':
+		scene.display_cam = CAMERA_CC_2;
+		glutPostRedisplay();
+		break;
+	case '3':
+		scene.display_cam = CAMERA_CC_3;
+		glutPostRedisplay();
+		break;
+	case '0':
+		scene.display_cam = CAMERA_MAIN;
+		glutPostRedisplay();
+		break;
+	case 'D':
 		depth_test_on = 1 - depth_test_on;
 		if (depth_test_on) {
 			glEnable(GL_DEPTH_TEST);
@@ -147,7 +170,7 @@ void keyboard(unsigned char key, int x, int y) {
 			fprintf(stdout, "^^^ Depth test disabled.\n");
 		}
 		glutPostRedisplay();
-		break;*/
+		break;
 	}
 }
 
@@ -158,6 +181,20 @@ void reshape(int width, int height) {
 	scene.create_camera_list(scene.window.width, scene.window.height, scene.window.aspect_ratio);
 	glutPostRedisplay();
 }
+
+void mouse_wheel(int button, int state, int x, int y) {
+	if ((button == 3) || (button == 4)) // It's a wheel event
+	{
+		if (state == GLUT_UP) return; // Disregard redundant GLUT_UP events
+
+		if (button == 3) zoom_aux(ZOOM_IN);
+		else zoom_aux(ZOOM_OUT);
+	}
+	else {  
+		// printf("Button %s At %d %d\n", (state == GLUT_DOWN) ? "Down" : "Up", x, y);
+	}
+}
+
 
 void timer_scene(int index) {
 	scene.clock(0);
@@ -170,6 +207,7 @@ void register_callbacks(void) {
 	glutKeyboardFunc(keyboard);
 	glutReshapeFunc(reshape);
  	glutTimerFunc(100, timer_scene, 0);
+	glutMouseFunc(mouse_wheel);
 //	glutCloseFunc(cleanup_OpenGL_stuffs or else); // Do it yourself!!!
 }
 
