@@ -26,7 +26,7 @@ void Axis_Object::define_axis() {
 }
 
 void Axis_Object::draw_axis(Shader_Simple* shader_simple, glm::mat4& ViewMatrix, glm::mat4& ProjectionMatrix) {
-#define WC_AXIS_LENGTH		60.0f
+#define WC_AXIS_LENGTH		10.0f
 	glm::mat4 ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(WC_AXIS_LENGTH, WC_AXIS_LENGTH, WC_AXIS_LENGTH));
 	glm::mat4 ModelViewProjectionMatrix = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
@@ -109,15 +109,23 @@ void Scene::create_camera_list(int win_width, int win_height, float win_aspect_r
 	camera_list.clear();
 	// main camera
 
-	//camera_data.cam_main.define_camera(win_width, win_height, win_aspect_ratio);
-	//camera_ID_mapper[CAMERA_MAIN] = camera_list.size();
-	//camera_list.push_back(camera_data.cam_main);
+	camera_data.cam_main.define_camera(win_width, win_height, win_aspect_ratio);
+	camera_ID_mapper[CAMERA_MAIN] = camera_list.size();
+	camera_list.push_back(camera_data.cam_main);
 	
 
 	// ortho cameras
 	camera_data.cam_front_side.define_camera(win_width, win_height, win_aspect_ratio);
 	camera_ID_mapper[CAMERA_FRONT_SIDE] = camera_list.size();
 	camera_list.push_back(camera_data.cam_front_side);
+
+	camera_data.cam_side.define_camera(win_width, win_height, win_aspect_ratio);
+	camera_ID_mapper[CAMERA_SIDE] = camera_list.size();
+	camera_list.push_back(camera_data.cam_side);
+
+	camera_data.cam_top.define_camera(win_width, win_height, win_aspect_ratio);
+	camera_ID_mapper[CAMERA_TOP] = camera_list.size();
+	camera_list.push_back(camera_data.cam_top);
 }
 
 void Scene::build_shader_list() {

@@ -29,12 +29,11 @@ void printVec(const glm::vec3& v) {
 
 void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	for (auto camera = scene.camera_list.begin(); camera != scene.camera_list.end(); camera++) {
-		if (camera->get().flag_valid == false) continue;
-		glViewport(camera->get().view_port.x, camera->get().view_port.y,
-			camera->get().view_port.w, camera->get().view_port.h);
-		scene.ViewMatrix = camera->get().ViewMatrix;
-		scene.ProjectionMatrix = camera->get().ProjectionMatrix;
+	for (auto& camera_wrapper : scene.camera_list) {
+		Camera& cam = camera_wrapper.get();
+		glViewport(cam.view_port.x, cam.view_port.y,cam.view_port.w, cam.view_port.h);
+		scene.ViewMatrix = cam.ViewMatrix;
+		scene.ProjectionMatrix = cam.ProjectionMatrix;
 
 		scene.draw_world();
 	}

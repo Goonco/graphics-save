@@ -52,15 +52,23 @@ void Static_Object::prepare_geom_of_static_object() {
 }
 
 void Building::define_object() {
+	glm::mat4* cur_MM;
 	Material* cur_material;
 	strcpy(filename, "Data/Building1_vnt.geom");
+	
 	n_fields = 8;
 	front_face_mode = GL_CCW;
 	prepare_geom_of_static_object();
 	flag_valid = true;
 
+	float BUILDING_HX = 110.0f;
+	float BUILDING_HY = 75.0f;
+	float BUILDING_HZ = 25.0f;
+
 	instances.emplace_back();
-	instances.back().ModelMatrix = glm::mat4(1.0f);
+	cur_MM = &(instances.back().ModelMatrix);
+	*cur_MM = glm::translate(glm::mat4(1.0f), glm::vec3(-(BUILDING_HX + 10.0f), -(BUILDING_HY + 10.0f), -BUILDING_HZ));
+	//*cur_MM = glm::scale(*cur_MM, glm::vec3(1.0f));
 
 	cur_material = &(instances.back().material);
 	cur_material->emission = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);

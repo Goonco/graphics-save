@@ -49,9 +49,8 @@ struct Camera {
 	View_Port view_port;
 
 	Camera(Camera_ID _camera_id) : camera_id(_camera_id) {}
-	bool flag_valid;
-	bool flag_move; // what else?
 
+	void define_axis_and_pos();
 	void look_at();
 	void move_camera(Camera_Move move);
 	void tilt_camera(Camera_Tilt tilt);
@@ -70,4 +69,6 @@ struct Orthographic_Camera : public Camera {
 struct Camera_Data {
 	Perspective_Camera cam_main { CAMERA_MAIN };
 	Orthographic_Camera cam_front_side{ CAMERA_FRONT_SIDE };
+	Orthographic_Camera cam_side{ CAMERA_SIDE };
+	Orthographic_Camera cam_top{ CAMERA_TOP };
 };
